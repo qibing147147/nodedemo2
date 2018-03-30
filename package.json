@@ -12,11 +12,6 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.2",
-    "mongodb": "^3.0.4",
-    "mongoose": "^5.0.10",
-    "qs": "^6.5.1",
-    "request": "^2.83.0",
-    "socket.io": "^2.0.4",
     "superagent": "^3.8.2",
     "superagent-charset": "^1.2.0"
   }
