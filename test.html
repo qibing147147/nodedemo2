@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./axios.min.js"></script>
+    <title>Document</title>
+    <script src="http://lib.baomitu.com/socket.io/2.0.4/socket.io.js"></script>
+</head>
+
+<body>
+    <script>
+        // axios.get('http://localhost:3000').then(res => {
+        //     console.log(res);
+        // }).catch(err => {
+        //     console.log(err);
+        // })
+        // var socket = io.connect('http://localhost:3000');
+        // socket.on('news', function (data) {
+        //     console.log(data);
+        //     socket.emit('my other event ', {
+        //         my: 'data '
+        //     });
+        // });
+        axios.post('http://localhost:3000/users/addUser', {
+            name: 'zqb',
+            age: 25
+        }).then(response => {
+            
+        })
+    </script>
+</body>
+
+</html>
