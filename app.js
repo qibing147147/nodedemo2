@@ -1,11 +1,15 @@
 const express = require('express');
 const charset = require('superagent-charset');
 const superagent = charset(require('superagent'));
+const request = require('request');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const http = require('http');
 const url = require('url');
 const app = express();
+const bodyParser = require('body-parser');
+const users = require('./user');
+app.use(bodyParser.json());
 app.all('*', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
@@ -14,6 +18,8 @@ app.all('*', function (req, res, next) {
     if (req.method == "OPTIONS") res.send(200); /*让options请求快速返回*/
     else next();
 });
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use('/users', users);
 app.get('/index', function (req, res, next) {
     // 用 superagent 去抓取 https://cnodejs.org/ 的内容
     let pagenumber = req.query.pagenumber ? req.query.pagenumber : 1;
@@ -21,7 +27,7 @@ app.get('/index', function (req, res, next) {
         .end(function (err, sres) {
             // 常规的错误处理
             if (err) {
-                return next(err);  
+                return next(err);
             }
             // sres.text 里面存储着网页的 html 内容，将它传给 cheerio.load 之后
             // 就可以得到一个实现了 jquery 接口的变量，我们习惯性地将它命名为 `$`
@@ -60,18 +66,32 @@ app.get('/index/getPageNumber', (req, res, next) => {
         let allPageNumber = $('.pagination ul li:last-child a').attr('href').split('=')[2];
         res.send(allPageNumber);
     })
-});
+})
 app.get('/getVideo', (req, res, next) => {
-    const mp4 = '1.mp4';
-    const stat = fs.statSync(mp4);
+    var mp4 = '1.mp4';
+    var stat = fs.statSync(mp4);
     res.writeHead(200, {
         'Content-Type': 'video/mp4',
         'Content-Length': stat.size
     })
 
-    const readableStream = fs.createReadStream(mp4);
+    var readableStream = fs.createReadStream(mp4);
     readableStream.pipe(res);
-});
+})
+app.post('/index/proxy', (req, res, next) => {
+    var url = req.body.url;
+    console.log(url);
+    req.pipe(request(url)).pipe(res);
+})
+app.get('/index/proxy1', (req, res, next) => {
+    var url = req.query.url;
+    console.log(url);
+    req.pipe(request(url)).pipe(res);
+})
+app.get('/axiosTest', (req, res, next) => {
+    let id = req.query.id;
+    res.send(id);
+})
 app.listen(3000, () => {
     console.log('app is listening at port 3000');
 })
