@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,22 @@
     <script src="./axios.min.js"></script>
     <title>Document</title>
 </head>
+
 <body>
     <script>
-        axios.get('http://localhost:3000').then(res => {
+        // axios.get('http://localhost:3000').then(res => {
+        //     console.log(res);
+        // }).catch(err => {
+        //     console.log(err);
+        // })
+        axios.post('http://localhost:3000/users/regiest', {
+            nickName: '123',
+            userName: 'qibing147147',
+            password: '85382926'
+        }).then(res => {
             console.log(res);
-        }).catch(err => {
-            console.log(err);
         })
     </script>
 </body>
+
 </html>
