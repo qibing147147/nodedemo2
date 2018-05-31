@@ -1,0 +1,55 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+
+<body>
+    <canvas id="my" width="1000" height="700" style="border: 1px solid #f00;background-color: #fff;"></canvas>
+    <button id="save">保存</button>
+</body>
+<script type="text/javascript">
+    var c = document.getElementById("my");
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, c.width, c.height);
+    c.onmousedown = function (e) {
+        var e = e || event;
+        var ox = e.clientX - c.offsetLeft;
+        var oy = e.clientY - c.offsetTop;
+        ctx.moveTo(ox, oy);
+        document.onmousemove = function (e) {
+            var ox2 = e.clientX - c.offsetLeft;
+            var oy2 = e.clientY - c.offsetTop;
+            ctx.lineTo(ox2, oy2);
+            ctx.stroke();
+        }
+        document.onmouseup = function (e) {
+            document.onmousemove = null;
+            document.onmouseup = null;
+        }
+    }
+    var saveFile = function (data, filename) {
+        var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+        save_link.href = data;
+        save_link.download = filename;
+
+        var event = document.createEvent('MouseEvents');
+        event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+        save_link.dispatchEvent(event);
+    };
+
+    // 下载后的问题名
+    var filename = 'baidufe_' + (new Date()).getTime() + '.' + 'jpg';
+    // download
+    var btn = document.getElementById('save');
+    btn.onclick = function () {
+        var tempSrc = c.toDataURL("image/jpg");
+        saveFile(tempSrc, filename);
+
+    }
+</script>
+
+</html>
