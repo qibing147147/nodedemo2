@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <script src="axios.min.js"></script>
 </head>
 
 <body>
@@ -41,13 +42,35 @@
         save_link.dispatchEvent(event);
     };
 
-    // 下载后的问题名
-    var filename = 'baidufe_' + (new Date()).getTime() + '.' + 'jpg';
     // download
     var btn = document.getElementById('save');
     btn.onclick = function () {
-        var tempSrc = c.toDataURL("image/jpg");
-        saveFile(tempSrc, filename);
+        // 下载后的问题名
+        var filename = 'baidufe_' + (new Date()).getTime() + '.' + 'jpg';
+        var tempSrc = c.toDataURL("image/jpeg");
+        //base64图片数据 
+        var arr = tempSrc.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        var obj = new Blob([u8arr], {
+            type: mime
+        });
+        console.log(tempSrc);
+        let params = new FormData();
+        params.append('file', obj, filename);
+        let config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+        axios.post('http://localhost:5000/upload', params, config).then(res => {
+            console.log(res);
+        })
 
     }
 </script>
