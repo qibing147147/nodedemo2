@@ -16,10 +16,8 @@
         // }).catch(err => {
         //     console.log(err);
         // })
-        axios.post('http://localhost:3000/users/regiest', {
-            nickName: '123',
-            userName: 'qibing147147',
-            password: '85382926'
+        axios.post('http://localhost:3000/index/postText', {
+            id: '123'
         }).then(res => {
             console.log(res);
         })

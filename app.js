@@ -19,6 +19,8 @@ app.all('*', function (req, res, next) {
     else next();
 });
 app.use(bodyParser.urlencoded({ extended: false }));
+//指定静态文件的位置
+app.use('/', express.static(__dirname));
 app.use('/users', users);
 app.get('/index', function (req, res, next) {
     // 用 superagent 去抓取 https://cnodejs.org/ 的内容
@@ -83,14 +85,23 @@ app.post('/index/proxy', (req, res, next) => {
     console.log(url);
     req.pipe(request(url)).pipe(res);
 })
-app.get('/index/proxy1', (req, res, next) => {
-    var url = req.query.url;
+app.post('/index/postText', (req, res, next) => {
+    res.send(req.body);
+})
+app.get('/index/:url', (req, res, next) => {
+    var url = `http://localhost:3000/${req.params.url}`;
     console.log(url);
     req.pipe(request(url)).pipe(res);
 })
 app.get('/axiosTest', (req, res, next) => {
     let id = req.query.id;
     res.send(id);
+})
+app.post('/insertDegree', (req, res, next) => {
+    let darr = req.body.arr;
+    console.log(darr);
+    
+    res.send('123');
 })
 app.listen(3000, () => {
     console.log('app is listening at port 3000');
